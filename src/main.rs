@@ -6,7 +6,7 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
     ExecutableCommand,
 };
-use ratatui::{prelude::*, widgets::*};
+use ratatui::{prelude::*, widgets::{canvas::Label, *}};
 use ratatui::{
     prelude::{CrosstermBackend, Stylize, Terminal},
     widgets::Paragraph,
@@ -28,10 +28,7 @@ fn main() -> Result<()> {
         terminal.draw(|frame| {
             let layout = Layout::default()
                 .direction(Direction::Vertical)
-                .constraints(vec![
-                    Constraint::Percentage(49),
-                    Constraint::Max(1),
-                ])
+                .constraints(vec![Constraint::Percentage(49), Constraint::Max(1)])
                 .split(frame.size());
 
             let from = app.from.to_string();
@@ -47,6 +44,7 @@ fn main() -> Result<()> {
 
             frame.render_widget(
                 Gauge::default()
+                    .label("")
                     .block(Block::default().borders(Borders::NONE))
                     .gauge_style(Style::default().fg(Color::White).bg(Color::Black))
                     .ratio(app.ratio()),
