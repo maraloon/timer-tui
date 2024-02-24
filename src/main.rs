@@ -40,8 +40,8 @@ fn main() -> Result<()> {
             let passed = app.passed();
 
             let text = format!(
-                "From: {}, to {}, remain {}, passed {}",
-                from, to, remain, passed
+                "remain {}, passed {}, ratio {}",
+                remain, passed, app.ratio()
             );
             frame.render_widget(Paragraph::new(text), layout[1]);
 
