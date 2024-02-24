@@ -22,6 +22,9 @@ fn main() -> Result<()> {
     let mut app = App::new();
 
     loop {
+        if app.remain() < 0 {
+            break;
+        }
         terminal.draw(|frame| {
             let layout = Layout::default()
                 .direction(Direction::Vertical)

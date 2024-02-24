@@ -7,7 +7,7 @@ pub struct App {
 
 impl App {
     pub fn new() -> App {
-        let test_time = 13000;
+        let test_time = 3000;
         let from = Local::now();
         let to = from + Duration::milliseconds(test_time);
 
