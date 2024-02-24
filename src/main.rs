@@ -36,12 +36,12 @@ fn main() -> Result<()> {
 
             let from = app.from.to_string();
             let to = app.to.to_string();
-            let remain = app.remain();
+            let remain = app.remainSeconds();
             let passed = app.passed();
 
             let text = format!(
                 "remain {}, passed {}, ratio {}",
-                remain, passed, app.ratio()
+                remain+1, passed, app.ratio()
             );
             frame.render_widget(Paragraph::new(text), layout[1]);
 

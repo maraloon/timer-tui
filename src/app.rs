@@ -27,6 +27,12 @@ impl App {
         to_timestamp - now_timestamp
     }
 
+    pub fn remainSeconds(&mut self) -> i64 {
+        let remain = self.remain();
+        let seconds = ((remain / 1000) as f64).ceil();
+        seconds as i64
+    }
+
     pub fn passed(&mut self) -> i64 {
         let full_percent = self.to.timestamp_millis() - self.from.timestamp_millis();
         let remain = self.remain();
