@@ -35,8 +35,9 @@ impl App {
     }
 
     pub fn bell_time(&mut self) -> String {
-        let when = Duration::milliseconds(self.to.timestamp_millis());
-        self.format_duration(when)
+        let hour = self.to.hour();
+        let minute = self.to.minute();
+        format!("{:02}:{:02}", hour, minute)
     }
 
     pub fn passed(&mut self) -> i64 {
