@@ -34,15 +34,15 @@ fn main() -> Result<()> {
                 .constraints(vec![Constraint::Percentage(48), Constraint::Max(1), Constraint::Max(1)])
                 .split(frame.size());
 
-            let from = app.from.to_string();
-            let to = app.to.to_string();
-            let remain = app.remain_seconds();
-            let passed = app.passed();
+            // let from = app.from.to_string();
+            // let to = app.to.to_string();
+            // let remain = app.remain_seconds();
+            // let passed = app.passed();
 
             let bell_symbol = '󰂚';
             let text = format!(
                 "{} - {} {}",
-                remain, bell_symbol, "todo"
+                app.remain_seconds(), bell_symbol, app.bell_time()
             );
             frame.render_widget(Paragraph::new(text), layout[1]);
 

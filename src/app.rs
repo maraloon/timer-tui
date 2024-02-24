@@ -34,6 +34,11 @@ impl App {
         self.format_duration(diff)
     }
 
+    pub fn bell_time(&mut self) -> String {
+        let when = Duration::milliseconds(self.to.timestamp_millis());
+        self.format_duration(when)
+    }
+
     pub fn passed(&mut self) -> i64 {
         let full_percent = self.to.timestamp_millis() - self.from.timestamp_millis();
         let remain = self.remain();
