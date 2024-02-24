@@ -18,14 +18,16 @@ fn main() -> Result<()> {
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
     terminal.clear()?;
 
-    let app = App::new();
+    let mut app = App::new();
 
     loop {
         terminal.draw(|frame| {
             let area = frame.size();
-            let from = app.from.elapsed().as_secs().to_string();
-            let to = app.from.elapsed().as_secs().to_string();
-            let text = format!("From: {}, to {}", from, to);
+            let from = app.from.to_string();
+            let to = app.to.to_string();
+            let remain = app.remain();
+
+            let text = format!("From: {}, to {}, remain {}", from, to, remain);
             frame.render_widget(
                 Paragraph::new(text)
                     .white()
