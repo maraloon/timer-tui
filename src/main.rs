@@ -46,7 +46,11 @@ fn main() -> Result<()> {
                 Gauge::default()
                     .label("")
                     .use_unicode(true)
-                    .block(Block::default().borders(Borders::NONE))
+                    .block(
+                        Block::default()
+                            .borders(Borders::NONE)
+                            .padding(Padding::new(3, 3, 0, 0)),
+                    )
                     .gauge_style(Style::default().fg(Color::White).bg(Color::Black))
                     .ratio(app.ratio()),
                 layout[1],

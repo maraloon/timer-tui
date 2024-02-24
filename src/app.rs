@@ -13,7 +13,7 @@ pub struct App {
 
 impl App {
     pub fn new() -> App {
-        let test_time = 1000; // 10 sec
+        let test_time = 10; // 10 sec
         let from = Utc::now();
         let to = from + Duration::from_secs(test_time);
 
