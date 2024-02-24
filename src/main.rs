@@ -10,7 +10,7 @@ use ratatui::{
     prelude::{CrosstermBackend, Stylize, Terminal},
     widgets::Paragraph,
 };
-use std::io::{stdout, Result};
+use std::{fmt::format, io::{stdout, Result}};
 
 fn main() -> Result<()> {
     stdout().execute(EnterAlternateScreen)?;
@@ -23,8 +23,11 @@ fn main() -> Result<()> {
     loop {
         terminal.draw(|frame| {
             let area = frame.size();
+            let from = app.from.elapsed().as_secs().to_string();
+            let to = app.from.elapsed().as_secs().to_string();
+            let text = format!("From: {}, to {}", from, to);
             frame.render_widget(
-                Paragraph::new(app.from.elapsed().as_secs().to_string())
+                Paragraph::new(text)
                     .white()
                     .on_black(),
                 area,
