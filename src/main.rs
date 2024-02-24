@@ -45,6 +45,7 @@ fn main() -> Result<()> {
             frame.render_widget(
                 Gauge::default()
                     .label("")
+                    .use_unicode(true)
                     .block(Block::default().borders(Borders::NONE))
                     .gauge_style(Style::default().fg(Color::White).bg(Color::Black))
                     .ratio(app.ratio()),
