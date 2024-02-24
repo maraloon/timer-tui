@@ -1,5 +1,5 @@
-use chrono::{DateTime, Utc};
-use std::time::Duration;
+use chrono::{prelude::*, DateTime, Utc, Duration};
+// use std::time::Duration;
 
 pub struct App {
     pub from: DateTime<Utc>,
@@ -10,7 +10,8 @@ impl App {
     pub fn new() -> App {
         let test_time = 13000;
         let from = Utc::now();
-        let to = from + Duration::from_millis(test_time);
+        // let to = from + Duration::from_millis(test_time);
+        let to = from + Duration::milliseconds(test_time);
 
         App { from, to }
     }
@@ -27,10 +28,10 @@ impl App {
         to_timestamp - now_timestamp
     }
 
-    pub fn remainSeconds(&mut self) -> i64 {
-        let remain = self.remain();
-        let seconds = ((remain / 1000) as f64).ceil();
-        seconds as i64
+    pub fn remain_seconds(&mut self) -> String {
+        // todo + 1000 looks dirty
+        let diff = Duration::milliseconds(self.remain() + 1000);
+        self.format_duration(diff)
     }
 
     pub fn passed(&mut self) -> i64 {
@@ -38,4 +39,16 @@ impl App {
         let remain = self.remain();
         full_percent - remain
     }
+
+    fn format_duration(&mut self,duration: Duration) -> String {
+        let hours = duration.num_hours();
+        let minutes = duration.num_minutes() % 60;
+        let seconds = duration.num_seconds() % 60;
+
+        if hours == 0 {
+            return format!("{:02}:{:02}", minutes, seconds);
+        }
+        format!("{:02}:{:02}:{:02}", hours, minutes, seconds)
+    }
 }
+
