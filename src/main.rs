@@ -26,8 +26,9 @@ fn main() -> Result<()> {
             let from = app.from.to_string();
             let to = app.to.to_string();
             let remain = app.remain();
+            let passed = app.passed();
 
-            let text = format!("From: {}, to {}, remain {}", from, to, remain);
+            let text = format!("From: {}, to {}, remain {}, passed {}", from, to, remain, passed);
             frame.render_widget(
                 Paragraph::new(text)
                     .white()
