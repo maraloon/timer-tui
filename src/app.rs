@@ -1,5 +1,4 @@
 use chrono::{prelude::*, DateTime, Utc, Duration, Local};
-// use std::time::Duration;
 
 pub struct App {
     pub from: DateTime<Local>,
@@ -10,7 +9,6 @@ impl App {
     pub fn new() -> App {
         let test_time = 13000;
         let from = Local::now();
-        // let to = from + Duration::from_millis(test_time);
         let to = from + Duration::milliseconds(test_time);
 
         App { from, to }

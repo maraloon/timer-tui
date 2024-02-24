@@ -6,18 +6,12 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
     ExecutableCommand,
 };
+use ratatui::{prelude::*, widgets::*};
 use ratatui::{
-    prelude::*,
-    widgets::{canvas::Label, *},
-};
-use ratatui::{
-    prelude::{CrosstermBackend, Stylize, Terminal},
+    prelude::{CrosstermBackend, Terminal},
     widgets::Paragraph,
 };
-use std::{
-    fmt::format,
-    io::{stdout, Result},
-};
+use std::io::{stdout, Result};
 
 fn main() -> Result<()> {
     stdout().execute(EnterAlternateScreen)?;
@@ -31,20 +25,22 @@ fn main() -> Result<()> {
         terminal.draw(|frame| {
             let layout = Layout::default()
                 .direction(Direction::Vertical)
-                .constraints(vec![Constraint::Percentage(48), Constraint::Max(1), Constraint::Max(1)])
+                .constraints(vec![
+                    Constraint::Percentage(48),
+                    Constraint::Max(1),
+                    Constraint::Max(1),
+                ])
                 .split(frame.size());
 
-            // let from = app.from.to_string();
-            // let to = app.to.to_string();
-            // let remain = app.remain_seconds();
-            // let passed = app.passed();
-
-            let bell_symbol = '󰂚';
-            let text = format!(
-                "{} - {} {}",
-                app.remain_seconds(), bell_symbol, app.bell_time()
+            let text = format!("{} - {} {}", app.remain_seconds(), '󰂚', app.bell_time());
+            frame.render_widget(
+                Paragraph::new(text).block(
+                    Block::default()
+                        .borders(Borders::NONE)
+                        .padding(Padding::new(4, 4, 0, 0)),
+                ),
+                layout[1],
             );
-            frame.render_widget(Paragraph::new(text), layout[1]);
 
             frame.render_widget(
                 Gauge::default()
