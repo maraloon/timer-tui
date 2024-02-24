@@ -26,32 +26,31 @@ fn main() -> Result<()> {
 
     loop {
         terminal.draw(|frame| {
-            // let area = frame.size();
+            let layout = Layout::default()
+                .direction(Direction::Vertical)
+                .constraints(vec![
+                    Constraint::Percentage(49),
+                    Constraint::Max(1),
+                ])
+                .split(frame.size());
+
             let from = app.from.to_string();
             let to = app.to.to_string();
             let remain = app.remain();
             let passed = app.passed();
 
-            let area = Rect::new(0, 0, frame.size().width, 1);
             let text = format!(
                 "From: {}, to {}, remain {}, passed {}",
                 from, to, remain, passed
             );
-            frame.render_widget(Paragraph::new(text), area);
-
-            let area = Rect::new(0, 1, frame.size().width, 1);
+            frame.render_widget(Paragraph::new(text), layout[0]);
 
             frame.render_widget(
                 Gauge::default()
                     .block(Block::default().borders(Borders::NONE))
-                    .gauge_style(
-                        Style::default()
-                            .fg(Color::White)
-                            .bg(Color::Black)
-                            .add_modifier(Modifier::ITALIC),
-                    )
+                    .gauge_style(Style::default().fg(Color::White).bg(Color::Black))
                     .ratio(app.ratio()),
-                area,
+                layout[1],
             );
         })?;
 
