@@ -6,7 +6,10 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
     ExecutableCommand,
 };
-use ratatui::{prelude::*, widgets::{canvas::Label, *}};
+use ratatui::{
+    prelude::*,
+    widgets::{canvas::Label, *},
+};
 use ratatui::{
     prelude::{CrosstermBackend, Stylize, Terminal},
     widgets::Paragraph,
@@ -28,7 +31,7 @@ fn main() -> Result<()> {
         terminal.draw(|frame| {
             let layout = Layout::default()
                 .direction(Direction::Vertical)
-                .constraints(vec![Constraint::Percentage(49), Constraint::Max(1)])
+                .constraints(vec![Constraint::Percentage(48), Constraint::Max(1), Constraint::Max(1)])
                 .split(frame.size());
 
             let from = app.from.to_string();
@@ -40,7 +43,7 @@ fn main() -> Result<()> {
                 "From: {}, to {}, remain {}, passed {}",
                 from, to, remain, passed
             );
-            frame.render_widget(Paragraph::new(text), layout[0]);
+            frame.render_widget(Paragraph::new(text), layout[1]);
 
             frame.render_widget(
                 Gauge::default()
@@ -49,11 +52,11 @@ fn main() -> Result<()> {
                     .block(
                         Block::default()
                             .borders(Borders::NONE)
-                            .padding(Padding::new(3, 3, 0, 0)),
+                            .padding(Padding::new(4, 4, 0, 0)),
                     )
-                    .gauge_style(Style::default().fg(Color::White).bg(Color::Black))
+                    .gauge_style(Style::default().fg(Color::Yellow).bg(Color::Black))
                     .ratio(app.ratio()),
-                layout[1],
+                layout[2],
             );
         })?;
 
