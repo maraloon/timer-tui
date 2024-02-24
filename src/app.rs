@@ -26,6 +26,12 @@ impl App {
         }
     }
 
+    pub fn ratio(&mut self) -> f64 {
+        let full: f64 = (self.to.timestamp() - self.from.timestamp()) as f64;
+        let passed: f64 = self.passed() as f64;
+        passed / full
+    }
+
     pub fn remain(&mut self) -> i64 {
         let to_timestamp = self.to.timestamp();
         let now_timestamp = Utc::now().timestamp();
