@@ -39,9 +39,10 @@ fn main() -> Result<()> {
             let remain = app.remain_seconds();
             let passed = app.passed();
 
+            let bell_symbol = '󰂚';
             let text = format!(
-                "remain {}, passed {}, ratio {}",
-                remain, passed, app.ratio()
+                "{} - {} {}",
+                remain, bell_symbol, "todo"
             );
             frame.render_widget(Paragraph::new(text), layout[1]);
 
