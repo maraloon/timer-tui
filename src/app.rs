@@ -1,4 +1,4 @@
-use chrono::{prelude::*, DateTime, Utc, Duration, Local};
+use chrono::{prelude::*, DateTime, Duration, Local, Utc};
 
 pub struct App {
     pub from: DateTime<Local>,
@@ -6,10 +6,19 @@ pub struct App {
 }
 
 impl App {
-    pub fn new() -> App {
-        let test_time = 3000;
+    pub fn new(first_arg: String) -> App {
+        let test_time = first_arg;
+
+        let result: Result<i64, _> = test_time.parse();
+        match result {
+            Ok(_parsed_number) => {}
+            Err(_) => {
+                panic!("Failed to parse the string as an i64");
+            }
+        }
+
         let from = Local::now();
-        let to = from + Duration::milliseconds(test_time);
+        let to = from + Duration::milliseconds(result.unwrap() * 1000);
 
         App { from, to }
     }
@@ -44,7 +53,7 @@ impl App {
         full_percent - remain
     }
 
-    fn format_duration(&mut self,duration: Duration) -> String {
+    fn format_duration(&mut self, duration: Duration) -> String {
         let hours = duration.num_hours();
         let minutes = duration.num_minutes() % 60;
         let seconds = duration.num_seconds() % 60;
@@ -55,4 +64,3 @@ impl App {
         format!("{:02}:{:02}:{:02}", hours, minutes, seconds)
     }
 }
-

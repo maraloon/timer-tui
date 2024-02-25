@@ -14,12 +14,14 @@ use ratatui::{
 use std::io::{stdout, Result};
 
 fn main() -> Result<()> {
+    let first_arg = std::env::args().nth(1).expect("no pattern given");
+
     stdout().execute(EnterAlternateScreen)?;
     enable_raw_mode()?;
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
     terminal.clear()?;
 
-    let mut app = App::new();
+    let mut app = App::new(first_arg);
 
     loop {
         if app.remain() < 0 {
