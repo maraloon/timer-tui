@@ -1,3 +1,4 @@
+use regex::{self, Regex};
 use chrono::{prelude::*, DateTime, Duration, Local, Utc};
 
 pub struct App {
@@ -24,11 +25,28 @@ impl App {
         match result {
             Ok(_parsed_number) => {}
             Err(_) => {
+                result = self.convert_arg_to_ms(time_string);
                 panic!("Failed to parse the string as an i64");
             }
         }
         result.unwrap() * 1000
 
+    }
+
+    fn convert_arg_to_ms(&mut self, time_string: String) -> Option<i64> {
+        let re = Regex::new(r"(\d+)([hms])").unwrap();
+        if let Some(captures) = re.captures(&time_string) {
+            let value: i64 = captures[1].parse().unwrap();
+            match &captures[2] {
+                "s" => Some(value * 1000),
+                "m" => Some(value * 1000 * 60),
+                "h" => Some(value * 1000 * 60 * 60),
+                _ => None, // todo
+            }
+        } else {
+            // todo
+            None
+        }
     }
 
     pub fn ratio(&mut self) -> f64 {
