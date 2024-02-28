@@ -7,20 +7,28 @@ pub struct App {
 
 impl App {
     pub fn new(first_arg: String) -> App {
-        let test_time = first_arg;
+        let mut app = App {
+            from: Local::now(),
+            to: Local::now()
+        };
 
-        let result: Result<i64, _> = test_time.parse();
+        let time = app.parse_time_argument(first_arg);
+        app.from = Local::now();
+        app.to = app.from + Duration::milliseconds(time);
+
+        app
+    }
+
+    fn parse_time_argument(&mut self, time_string: String) -> i64 {
+        let result: Result<i64, _> = time_string.parse();
         match result {
             Ok(_parsed_number) => {}
             Err(_) => {
                 panic!("Failed to parse the string as an i64");
             }
         }
+        result.unwrap() * 1000
 
-        let from = Local::now();
-        let to = from + Duration::milliseconds(result.unwrap() * 1000);
-
-        App { from, to }
     }
 
     pub fn ratio(&mut self) -> f64 {
