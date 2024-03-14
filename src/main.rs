@@ -1,6 +1,7 @@
-mod app;
+mod timer;
+mod arg_resolver;
+mod fmt;
 
-use app::App;
 use crossterm::{
     event::{self, KeyCode, KeyEventKind},
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
@@ -11,6 +12,7 @@ use ratatui::{
     prelude::{CrosstermBackend, Terminal},
     widgets::Paragraph,
 };
+use timer::Timer;
 use std::io::{stdout, Result};
 
 fn main() -> Result<()> {
@@ -21,10 +23,11 @@ fn main() -> Result<()> {
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
     terminal.clear()?;
 
-    let mut app = App::new(first_arg);
+    let duration_ms = arg_resolver::parse_time_argument(first_arg);
+    let mut timer = Timer::new(duration_ms);
 
     loop {
-        if app.remain() < 0 {
+        if timer.remain_ms() < 0 {
             break;
         }
         terminal.draw(|frame| {
@@ -37,7 +40,11 @@ fn main() -> Result<()> {
                 ])
                 .split(frame.size());
 
-            let text = format!("{} - {} {}", app.remain_seconds(), '󰂚', app.bell_time());
+            let text = format!(
+                "{} - 󰂚 {}",
+                fmt::remain_time_string(&mut timer),
+                fmt::finish_time_string(&mut timer)
+            );
             frame.render_widget(
                 Paragraph::new(text).block(
                     Block::default()
@@ -57,7 +64,7 @@ fn main() -> Result<()> {
                             .padding(Padding::new(4, 4, 0, 0)),
                     )
                     .gauge_style(Style::default().fg(Color::Yellow).bg(Color::Black))
-                    .ratio(app.ratio()),
+                    .ratio(timer.ratio()),
                 layout[2],
             );
         })?;
