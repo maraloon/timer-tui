@@ -1,6 +1,6 @@
-mod timer;
 mod arg_resolver;
 mod fmt;
+mod timer;
 
 use crossterm::{
     event::{self, KeyCode, KeyEventKind},
@@ -12,18 +12,25 @@ use ratatui::{
     prelude::{CrosstermBackend, Terminal},
     widgets::Paragraph,
 };
-use timer::Timer;
 use std::io::{stdout, Result};
+use timer::Timer;
 
 fn main() -> Result<()> {
     let first_arg = std::env::args().nth(1).expect("no pattern given");
+
+    let duration_ms = match arg_resolver::parse_time_argument(first_arg) {
+        Ok(d) => d,
+        Err(err) => {
+            eprint!("Error: {}", err);
+            std::process::exit(1);
+        }
+    };
 
     stdout().execute(EnterAlternateScreen)?;
     enable_raw_mode()?;
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
     terminal.clear()?;
 
-    let duration_ms = arg_resolver::parse_time_argument(first_arg);
     let mut timer = Timer::new(duration_ms);
 
     loop {
