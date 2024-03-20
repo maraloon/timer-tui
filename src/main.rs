@@ -56,8 +56,9 @@ fn main() -> Result<()> {
                 Paragraph::new(text).block(
                     Block::default()
                         .borders(Borders::NONE)
-                        .padding(Padding::new(4, 4, 0, 0)),
-                ),
+                        .padding(Padding::new(1, 1, 0, 0)),
+                )
+                .style(Style::default().fg(Color::Rgb(255, 0, 0))),
                 layout[1],
             );
 
@@ -68,9 +69,9 @@ fn main() -> Result<()> {
                     .block(
                         Block::default()
                             .borders(Borders::NONE)
-                            .padding(Padding::new(4, 4, 0, 0)),
+                            .padding(Padding::new(1, 1, 0, 0)),
                     )
-                    .gauge_style(Style::default().fg(Color::Yellow).bg(Color::Black))
+                    .gauge_style(Style::default().fg(Color::Rgb(0, 208, 152)).bg(Color::Black))
                     .ratio(timer.ratio()),
                 layout[2],
             );
