@@ -1,8 +1,8 @@
-# Timer CLI
+# Timer TUI
 
 ## about
 It's a timer
-![Screenshot of cli](/files/screenshot.png "Screenshot")
+![Screenshot of tui](/files/screenshot_big_font.png "Screenshot")
 
 Write in rust with [Ratatui](https://github.com/ratatui-org/ratatui)
 
@@ -20,6 +20,11 @@ timer-tui 5s
 timer-tui 5m
 timer-tui 5h
 ```
+
+## Keys
+`q` - Quite
+
+`p` - Pause
 
 ## tweaking
 add alias for sh so u can use `t tea` or `t 5m`

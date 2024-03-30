@@ -7,7 +7,7 @@ pub fn remain_time_string(timer: &mut Timer) -> String {
     // and it's look like a bug, when we show 14, not 15
     // so i add 1 second
     // to fake reality and don't fear users with horrible truth
-    let remain_ms_fixuped = timer.remain_ms() + 1000;
+    let remain_ms_fixuped = timer.remain_ms + 1000;
 
     let remain = Duration::milliseconds(remain_ms_fixuped);
 
@@ -22,7 +22,12 @@ pub fn remain_time_string(timer: &mut Timer) -> String {
 }
 
 pub fn finish_time_string(timer: &mut Timer) -> String {
-    let hour = timer.finish.hour();
-    let minute = timer.finish.minute();
-    format!("{:02}:{:02}", hour, minute)
+    let hour = timer.finish_at.hour();
+    let minute = timer.finish_at.minute();
+    let second = timer.finish_at.second();
+    format!("{:02}:{:02}:{:02}", hour, minute, second)
+}
+
+pub fn ratio(timer: &mut Timer) -> f64 {
+    timer.passed_ms as f64 / timer.full_ms as f64
 }

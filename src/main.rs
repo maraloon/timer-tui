@@ -34,7 +34,8 @@ fn main() -> Result<()> {
     let mut timer = Timer::new(duration_ms);
 
     loop {
-        if timer.remain_ms() < 0 {
+        timer.tick();
+        if timer.remain_ms < 0 {
             break;
         }
         terminal.draw(|frame| {
@@ -52,13 +53,24 @@ fn main() -> Result<()> {
                 fmt::remain_time_string(&mut timer),
                 fmt::finish_time_string(&mut timer)
             );
+
+            let text_color = match timer.paused {
+                true => Color::Rgb(44, 56, 54),
+                false => Color::Rgb(255, 0, 0),
+            };
+            let progress_color = match timer.paused {
+                true => Color::Rgb(44, 56, 54),
+                false => Color::Rgb(0, 208, 152)
+            };
+
             frame.render_widget(
-                Paragraph::new(text).block(
-                    Block::default()
-                        .borders(Borders::NONE)
-                        .padding(Padding::new(1, 1, 0, 0)),
-                )
-                .style(Style::default().fg(Color::Rgb(255, 0, 0))),
+                Paragraph::new(text)
+                    .block(
+                        Block::default()
+                            .borders(Borders::NONE)
+                            .padding(Padding::new(1, 1, 0, 0)),
+                    )
+                    .style(Style::default().fg(text_color)),
                 layout[1],
             );
 
@@ -71,16 +83,24 @@ fn main() -> Result<()> {
                             .borders(Borders::NONE)
                             .padding(Padding::new(1, 1, 0, 0)),
                     )
-                    .gauge_style(Style::default().fg(Color::Rgb(0, 208, 152)).bg(Color::Black))
-                    .ratio(timer.ratio()),
+                    .gauge_style(
+                        Style::default()
+                            .fg(progress_color)
+                            .bg(Color::Black),
+                    )
+                    .ratio(fmt::ratio(&mut timer)),
                 layout[2],
             );
         })?;
 
         if event::poll(std::time::Duration::from_millis(10))? {
             if let event::Event::Key(key) = event::read()? {
-                if key.kind == KeyEventKind::Press && key.code == KeyCode::Char('q') {
-                    break;
+                if key.kind == KeyEventKind::Press {
+                    match key.code {
+                        KeyCode::Char('p') => timer.toggle_pause(),
+                        KeyCode::Char('q') => break,
+                        _ => todo!(),
+                    }
                 }
             }
         }

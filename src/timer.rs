@@ -1,32 +1,45 @@
-use chrono::{DateTime, Duration, Local, Utc};
+use chrono::{DateTime, Duration, Local};
 
 pub struct Timer {
-    pub start: DateTime<Local>,
-    pub finish: DateTime<Local>,
+    pub passed_ms: i64,
+    pub remain_ms: i64,
+    pub full_ms: i64,
+    pub finish_at: DateTime<Local>,
+    pub paused: bool,
+    paused_at: DateTime<Local>, // TODO: Option
 }
 
 impl Timer {
     pub fn new(timer_duration: i64) -> Timer {
         let now = Local::now();
+        let finish_at = now + Duration::milliseconds(timer_duration);
+        let full_ms = finish_at.timestamp_millis() - now.timestamp_millis();
+        let passed_ms = 0;
+        let remain_ms = full_ms - passed_ms;
         Timer {
-            start: now,
-            finish: now + Duration::milliseconds(timer_duration),
+            passed_ms,
+            remain_ms,
+            full_ms,
+            finish_at,
+            paused: false,
+            paused_at: now,
         }
     }
 
-    pub fn ratio(&mut self) -> f64 {
-        self.passed_ms() as f64 / self.duration_ms() as f64
+    pub fn tick(&mut self) {
+        if self.paused {
+            self.finish_at = Local::now() + Duration::milliseconds(self.remain_ms);
+        } else {
+            let now = Local::now();
+            self.remain_ms = self.finish_at.timestamp_millis() - now.timestamp_millis();
+            self.passed_ms = self.full_ms - self.remain_ms;
+        }
     }
 
-    pub fn remain_ms(&mut self) -> i64 {
-        self.finish.timestamp_millis() - Utc::now().timestamp_millis()
-    }
-
-    fn passed_ms(&mut self) -> i64 {
-        self.duration_ms() - self.remain_ms()
-    }
-
-    fn duration_ms(&mut self) -> i64 {
-        self.finish.timestamp_millis() - self.start.timestamp_millis()
+    pub fn toggle_pause(&mut self) {
+        self.paused = !self.paused;
+        if self.paused {
+            self.paused_at = Local::now()
+        }
     }
 }
